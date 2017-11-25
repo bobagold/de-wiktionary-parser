@@ -1,0 +1,20 @@
+{
+  "name": "de-wiktionary-parser",
+  "version": "1.0.0",
+  "description": "Fetch and parse articles from German wiktionary",
+  "main": "clean_mediawiki.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "bash fetch_mediawiki.sh && bash clean_mediawiki.sh && bash prepare_games.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bobagold/de-wiktionary-parser.git"
+  },
+  "author": "Vladimir Goldobin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bobagold/de-wiktionary-parser/issues"
+  },
+  "homepage": "https://github.com/bobagold/de-wiktionary-parser#readme"
+}
