@@ -1,4 +1,3 @@
-const { readFileSync } = require('fs');
 
 function between(start, end) {
   let inBetween = false;
@@ -87,40 +86,18 @@ function template(match) {
   return words.map(word => (s[word] || word.replace('ft=', ''))).join(', ').replace(/, (.)$/, '$1');
 }
 
-const input = readFileSync('/dev/stdin').toString().split('\n');
-let form = '';
-switch (process.argv[process.argv.length - 1]) {
-  case 'verb':
-    form = 'Verb';
-    break;
-  case 'conjunction':
-    form = '(Konjunktion|Subjunktion)';
-    break;
-  case 'noun':
-    form = 'Substantiv';
-    break;
-  case 'adjective':
-    form = 'Adjektiv';
-    break;
-}
-const interestingPart = between(new RegExp(`^=== .*{{Wortart\\|${form}\\|Deutsch}}`), /{{Referenzen}}/);
-const text = interestingPart(input);
-if (text.length === 0) {
-  console.log(JSON.stringify({}));
-  process.exit(0);
-}
 const end = /^({{\w+}})?$/;
 const prefix = /^:+\[[^\]]*][ :]*/;
 const templates = replace(/{{([^}]+)}}/g, (match, ...p) => template(...p));
 const references = [
-  replace(/&lt;ref&gt;.*&lt;\/ref&gt;/g, ''),
-  replace(/&lt;ref( name=\w+)\/&gt;/g, ''),
-  replace(/&lt;ref&gt;.*$/g, ''),
-  replace(/^.*&lt;\/ref&gt;/g, ''),
+  replace(/<ref>.*<\/ref>/g, ''),
+  replace(/<ref( name=\w+)\/>/g, ''),
+  replace(/<ref>.*$/g, ''),
+  replace(/^.*<\/ref>/g, ''),
 ];
-const comments = replace(/&lt;!-- .* --&gt;/g, '');
+const comments = replace(/<!-- .* -->/g, '');
 const wikiLinks = replace(/\[\[[^\]]+\|([^\]]+)]]/, '$1');
-const crossReferences = [prefix, '[[', ']]', '&lt;small&gt;', '&lt;/small&gt;'].map(clean);
+const crossReferences = [prefix, '[[', ']]', '<small>', '</small>'].map(clean);
 const fields = {
   forms: [
     between('{{Worttrennung}}', end),
@@ -132,9 +109,8 @@ const fields = {
     ...references,
     comments,
     replaceAll('\'\'', '_'),
-    replaceAll('&quot;', '"'),
-    replace(/&lt;\/?sup&gt;/g, ''),
-    replace(/&lt;\/?span&gt;/g, ''),
+    replace(/<\/?sup>/g, ''),
+    replace(/<\/?span>/g, ''),
     templates,
     ...crossReferences,
     having(/\w/)
@@ -150,14 +126,13 @@ const fields = {
     skip('{{Beispiele fehlen}}'),
     ...references,
     comments,
-    replaceAll('&amp;nbsp;', ' '),
-    replaceAll('&amp;mdash;', '—'),
-    replace(/&lt;sup&gt;.*&lt;\/sup&gt;/g, ''),
-    ...[prefix, '&lt;br /&gt;'].map(clean),
+    replaceAll('&nbsp;', ' '),
+    replaceAll('&mdash;', '—'),
+    replace(/<sup>.*<\/sup>/g, ''),
+    ...[prefix, '<br />'].map(clean),
     replace(/\[\[w:[\w ]+\|([\w ]+)]], {{Wikisource\|([\w ]+)}}/, '$1, „$2“'),
     wikiLinks,
     replaceAll('\'\'', '_'),
-    replaceAll('&quot;', '"')
   ],
   translations: [
     between('{{Übersetzungen}}', end),
@@ -168,7 +143,32 @@ const fields = {
     having(/\w/)
   ]
 };
-const ret = Object.assign(...Object.keys(fields)
-  .map(k => ({[k]: chain(fields[k])(text)}))
-);
-console.log(JSON.stringify(ret));
+
+module.exports = function (html, pos) {
+  const input = html.split('\n');
+  let form = '';
+  switch (pos) {
+    case 'verb':
+      form = 'Verb';
+      break;
+    case 'conjunction':
+      form = '(Konjunktion|Subjunktion)';
+      break;
+    case 'noun':
+      form = 'Substantiv';
+      break;
+    case 'adjective':
+      form = 'Adjektiv';
+      break;
+    default:
+      throw new Error(`unknown pos (part of speach): ${pos}`);
+  }
+  const interestingPart = between(new RegExp(`^=== .*{{Wortart\\|${form}\\|Deutsch}}`), /{{Referenzen}}/);
+  const text = interestingPart(input);
+  if (text.length === 0) {
+    return {};
+  }
+  return Object.assign(...Object.keys(fields)
+    .map(k => ({ [k]: chain(fields[k])(text) }))
+  );
+};

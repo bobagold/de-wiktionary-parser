@@ -1,4 +1,4 @@
 test -d games || mkdir games
 for pos in verb noun adjective conjunction; do
-    bash prepare_game.sh "$pos" > "games/$pos.json";
+    cat "data/$pos.json" | json -e "const data = this; this.e = $(cat prepare_game.js)" e > "games/$pos.json";
 done
