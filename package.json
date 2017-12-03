@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/bobagold/de-wiktionary-parser#readme",
   "dependencies": {
+    "json": "^9.0.6",
     "xml-stream": "^0.4.5"
   }
 }

@@ -6,5 +6,5 @@ function clean() {
 for pos in verb noun adjective conjunction; do
     for i in data/"$pos"*.xml; do
         cat "$i" | node parse_mediawiki.js "$pos"
-    done | json --merge > "data/$pos.json"
+    done | $(npm bin)/json --merge > "data/$pos.json"
 done
