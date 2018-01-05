@@ -1,4 +1,4 @@
-Object.keys(data).map((v) => {
+exports.prepareGame = data => Object.keys(data).map((v) => {
   const w = data[v];
   const ee = w.examples && w.examples.filter(e => e.includes('_'));
   const e = ee && ee[Math.floor(Math.random() * ee.length)];

@@ -5,7 +5,12 @@
   "main": "clean_mediawiki.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install": "bash fetch_mediawiki.sh && bash parse_mediawiki.sh && bash prepare_games.sh"
+    "install": "./bin/fetch_mediawiki.js && ./bin/parse_mediawiki && ./bin/prepare_games"
+  },
+  "bin": {
+    "fetch_mediawiki": "./bin/fetch_mediawiki",
+    "parse_mediawiki": "./bin/parse_mediawiki",
+    "prepare_games": "./bin/prepare_games"
   },
   "repository": {
     "type": "git",
@@ -18,7 +23,7 @@
   },
   "homepage": "https://github.com/bobagold/de-wiktionary-parser#readme",
   "dependencies": {
-    "json": "^9.0.6",
+    "request": "^2.83.0",
     "xml-stream": "^0.4.5"
   }
 }
