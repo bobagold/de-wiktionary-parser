@@ -5,7 +5,7 @@
   "main": "clean_mediawiki.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install": "./bin/fetch_mediawiki.js && ./bin/parse_mediawiki && ./bin/prepare_games"
+    "install": "./bin/fetch_mwiki && ./bin/parse_mwiki && ./bin/prepare_games"
   },
   "bin": {
     "fetch_mediawiki": "./bin/fetch_mediawiki",

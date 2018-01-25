@@ -1,2 +1,8 @@
 #!/usr/bin/env node
-require('../prepare_games');
+const fs = require('fs');
+const {prepareGame} = require('../index');
+
+fs.existsSync('games') || fs.mkdirSync('games');
+['verb', 'conjunction', 'adjective', 'noun'].forEach((pos) => {
+  fs.writeFile(`games/${pos}.json`, JSON.stringify(prepareGame(JSON.parse(fs.readFileSync(`./data/${pos}.json`, 'utf8')))));
+});

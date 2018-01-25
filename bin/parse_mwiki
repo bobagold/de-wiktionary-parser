@@ -1,0 +1,14 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const {processStream} = require('../index');
+
+const files = fs.readdirSync('data/');
+['verb', 'conjunction', 'adjective', 'noun'].forEach((pos) => {
+  Promise.all(
+    files.filter((f) => f.includes(pos) && f.endsWith('.xml'))
+      .map((f) => processStream(fs.createReadStream(`data/${f}`), pos))
+  ).then(objects => Object.assign({}, ...objects)
+  ).then(ret =>
+    fs.writeFileSync(`data/${pos}.json`, JSON.stringify(ret))
+  );
+});

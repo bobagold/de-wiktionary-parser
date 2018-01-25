@@ -144,7 +144,7 @@ const fields = {
   ]
 };
 
-module.exports = function (html, pos) {
+exports.clean = function (html, pos) {
   const input = html.split('\n');
   let form = '';
   switch (pos) {

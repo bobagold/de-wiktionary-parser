@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+const request = require('request');
+const fs = require('fs');
+const {urls} = require('../index.js');
+
+fs.existsSync('data') || fs.mkdirSync('data');
+['verb', 'conjunction', 'adjective', 'noun'].forEach((pos) => {
+    const lines = fs.readFileSync(`${pos}.txt`, 'utf8').split('\n');
+    urls(lines).forEach((url, i) => {
+      const fileName = `data/${pos}${i}.xml`;
+      const tmpFileName = `${fileName}.tmp`;
+      request.get(url)
+        .on('error', () => fs.unlink(tmpFileName))
+        .on('complete', () => fs.rename(tmpFileName, fileName))
+        .pipe(fs.createWriteStream(tmpFileName))
+      //todo sleep 1
+    });
+});
