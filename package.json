@@ -8,8 +8,8 @@
     "install": "./bin/fetch_mwiki && ./bin/parse_mwiki && ./bin/prepare_games"
   },
   "bin": {
-    "fetch_mediawiki": "./bin/fetch_mediawiki",
-    "parse_mediawiki": "./bin/parse_mediawiki",
+    "fetch_mwiki": "./bin/fetch_mwiki",
+    "parse_mwiki": "./bin/parse_mwiki",
     "prepare_games": "./bin/prepare_games"
   },
   "repository": {
