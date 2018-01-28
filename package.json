@@ -2,7 +2,7 @@
   "name": "de-wiktionary-parser",
   "version": "1.0.0",
   "description": "Fetch and parse articles from German wiktionary",
-  "main": "clean_mediawiki.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "install": "./bin/fetch_mwiki && ./bin/parse_mwiki && ./bin/prepare_games"
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/bobagold/de-wiktionary-parser#readme",
   "dependencies": {
-    "request": "^2.85.0",
+    "node-fetch": "^1.7.3",
     "xml-stream": "^0.4.5"
   }
 }
