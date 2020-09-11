@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/bobagold/de-wiktionary-parser#readme",
   "dependencies": {
-    "node-fetch": "^1.7.3",
+    "node-fetch": "^2.6.1",
     "xml-stream": "^0.4.5"
   }
 }
